@@ -1,6 +1,5 @@
 // https://adventofcode.com/2023/day/1
 
-mod test;
 mod trebuchet {
     #[allow(dead_code)]
     fn get_number_sum(input: &str) -> usize {

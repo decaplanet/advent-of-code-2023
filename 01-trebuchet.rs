@@ -1,111 +1,62 @@
 // https://adventofcode.com/2023/day/1
 
-mod trebuchet {
-    fn replace_number_letters(input: String) -> String {
-        let mut replaced_input = input;
+pub mod trebuchet {
+    const NUMBERS: [&str; 10] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+    const NUMBER_LETTERS: [&str; 10] = [
+        "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
+    ];
 
-        const NUMBERS: [&str; 10] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-        const NUMBER_LETTERS: [&str; 10] = [
-            "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
-        ];
+    pub fn get_number_sum(input: &str) -> usize {
+        // TODO: Rewrite Solution
 
-        for (index, number_letter) in NUMBER_LETTERS.iter().enumerate() {
-            replaced_input = replaced_input.replace(number_letter, NUMBERS[index]);
-        }
-
-        replaced_input
-    }
-
-    fn get_number_sum(input: &str) -> usize {
-        let lines = input.split('\n');
-        let mut two_digit_numbers: Vec<usize> = Vec::new();
-
-        for line in lines {
-            let line = replace_number_letters(line.to_string());
-            let mut digits_in_line: Vec<usize> = Vec::new();
-            for letter in line.chars() {
-                if let Ok(digit) = letter.to_string().parse::<usize>() {
-                    digits_in_line.push(digit);
-                };
-            }
-
-            let first_digit = digits_in_line
-                .first()
-                .expect("Failed to read the first digit.");
-            let last_digit = digits_in_line
-                .last()
-                .expect("Failed to read the second digit.");
-            let two_digit_string = format!("{}{}", first_digit, last_digit)
-                .parse::<usize>()
-                .expect("Failed to read two digit number.");
-
-            println!("{}, {}", first_digit, last_digit);
-
-            two_digit_numbers.push(two_digit_string);
-        }
-
-        println!("{:#?}", two_digit_numbers);
-        let mut sum: usize = 0;
-        for number in two_digit_numbers {
-            sum += number;
-        }
-
-        sum
+        0
     }
 
     #[cfg(test)]
     mod test {
-        use super::get_number_sum;
+        mod replace_number_letters {
+            use crate::trebuchet::get_number_sum;
 
-        #[test]
-        fn test_example_1() {
-            let input = r#"1abc2
+            #[test]
+            fn test_example() {
+                let input = r#"1abc2
 pqr3stu8vwx
 a1b2c3d4e5f
 treb7uchet"#;
-            let output = get_number_sum(input);
-            let expected_answer: usize = 142;
+                let output = get_number_sum(input);
+                let expected_answer: usize = 142;
 
-            assert_eq!(output, expected_answer);
-        }
+                assert_eq!(output, expected_answer);
+            }
 
-        #[test]
-        fn test_example_2() {
-            let input = r#"eight2sevenkl
-mrjstg5onetwoeightgcczx8vgrgl
-9246
-ninetwo2crrqk2grsctqxqbcrmrdsqbrz9eight
-five6dlhx1
-29qhsdqqtgrk4
-mjgtrjnlttxjlsixsix5
-bgnnvfsnbpx29vsjrlmgmsqthreeqxvclkhlv
-sevennine3gsmxncqlqvfktxrtcone"#;
-            let output = get_number_sum(input);
-            let expected_answer: usize = 573;
+            #[test]
+            fn test_basic_numbers() {
+                assert_eq!(get_number_sum("zero"), 0);
+                assert_eq!(get_number_sum("one"), 1);
+                assert_eq!(get_number_sum("two"), 2);
+                assert_eq!(get_number_sum("three"), 3);
+                assert_eq!(get_number_sum("four"), 4);
+                assert_eq!(get_number_sum("five"), 5);
+                assert_eq!(get_number_sum("six"), 6);
+                assert_eq!(get_number_sum("seven"), 7);
+                assert_eq!(get_number_sum("eight"), 8);
+                assert_eq!(get_number_sum("nine"), 9);
+            }
 
-            assert_eq!(output, expected_answer);
-        }
+            #[test]
+            fn test_overlapping_numbers() {
+                assert_eq!(get_number_sum("twone"), 21);
+                assert_eq!(get_number_sum("eightwo"), 82);
+                assert_eq!(get_number_sum("nineight"), 98);
+                assert_eq!(get_number_sum("eighthreee"), 83);
+                assert_eq!(get_number_sum("nineeight"), 98);
+            }
 
-        #[test]
-        fn test_example_3() {
-            let input = r#"ntqtg1
-hsqkbfnxcbsixmvfhxrvxrvnineseven4
-bkztqhhbdzr1sevenonenine1
-v79zpdqfive
-tqtwonesixlhhnvf77one1
-2twofour
-eight89seven
-7six6fmzlrttxstdrg
-seventhreecbldkqd89threesevenpplfv
-7hmhxpg
-threepmvqfc5rktgjl4xvdzmhrninef
-7qnlqhtrrk1sevenqfgpkdfc271seven
-4gxrqspvg1
-zdgfscbzbdg8rvqseven"#;
-            let output = get_number_sum(input);
-            let expected_answer: usize = 757;
-
-            assert_eq!(output, expected_answer);
+            #[test]
+            fn test_other_edge_cases() {
+                assert_eq!(get_number_sum("eeeight"), 8);
+                assert_eq!(get_number_sum("oooneone"), 11);
+            }
         }
     }
 }
